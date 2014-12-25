@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MainWindow.h"
+#include "Resources.h"
 
 MainWindow::MainWindow( LPCTSTR wndName, HINSTANCE hInstance, int nCmdShow, WNDPROC WndProc,
                         LPCTSTR menuName)
@@ -21,11 +22,34 @@ MainWindow::MainWindow( LPCTSTR wndName, HINSTANCE hInstance, int nCmdShow, WNDP
     if (!RegisterClassEx(&wc_))
         return;
 
-    hWnd_ = CreateWindow(szClassName, wndName, WS_OVERLAPPEDWINDOW, 0, 0, 
+    hWnd_ = CreateWindowEx(WS_EX_LAYERED, szClassName, wndName, WS_OVERLAPPEDWINDOW, 0, 0,
                          WND_WIDTH, WND_HEIGHT, NULL, NULL, hInstance, NULL);
 
     if (hWnd_ == NULL)
         return;
+
+    HBITMAP hBmp = LoadBitmap(hInstance, MAKEINTRESOURCE(ID_MAIN_WINDOW_BMP));
+    BITMAP bm;
+    GetObject(hBmp, sizeof(bm), &bm);
+    int bmpWidth = bm.bmWidth;
+    int bmpHeight = bm.bmHeight;
+
+    HDC hDcScreen = GetDC(0);
+    HDC hDc = CreateCompatibleDC(hDcScreen);
+    ReleaseDC(0, hDcScreen);
+    HBITMAP hBmpOld = (HBITMAP)SelectObject(hDc, hBmp);
+
+    POINT dcOffset = { 0, 0 };
+    SIZE size = { bmpWidth, bmpHeight };
+    BLENDFUNCTION bf;
+    bf.BlendOp = AC_SRC_OVER;
+    bf.BlendFlags = 0;
+    bf.SourceConstantAlpha = 255;
+    bf.AlphaFormat = AC_SRC_ALPHA;
+    UpdateLayeredWindow(hWnd_, 0, 0, &size, hDc, &dcOffset, RGB(0, 0, 0), &bf, ULW_COLORKEY);
+    SelectObject(hDc, hBmpOld);
+    DeleteDC(hDc);
+    DeleteObject(hBmp);
 
     RECT rc;
 

@@ -4,6 +4,9 @@
     <Filter Include="Main">
       <UniqueIdentifier>{abeebdb7-1029-4081-8c44-6dff5b1bc292}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{931e8ea2-1639-406b-bef7-3b7686b9d716}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -20,5 +23,13 @@
     <ClInclude Include="MainWindow.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="Resources.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
